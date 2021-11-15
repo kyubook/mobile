@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:graphql_flutter/graphql_flutter.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,34 +24,21 @@ class MyHomPage extends StatefulWidget {
 }
 
 class _MyHomPageState extends State<MyHomPage> {
-  late final ValueNotifier<GraphQLClient> Client;
-
   @override
   void initState() {
-    Client = ValueNotifier(
-      GraphQLClient(
-        link: HttpLink(''),
-        cache: GraphQLCache(
-          store: InMemoryStore(),
-        ),
-      ),
-    );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GraphQLProvider(
-      client: Client,
-      child: MaterialApp(
-        title: 'Material App',
-        home: Scaffold(
-          appBar: AppBar(
-            title: const Text('Rick n Morty'),
-            backgroundColor: Colors.black,
-          ),
-          body: const RickAndMortyChacactersListWidget(),
+    return MaterialApp(
+      title: 'Material App',
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Rick n Morty'),
+          backgroundColor: Colors.black,
         ),
+        body: const RickAndMortyChacactersListWidget(),
       ),
     );
   }
