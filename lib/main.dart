@@ -147,8 +147,41 @@ class _RickAndMortyChacactersListWidgetState
                       Column(
                         children: [
                           Text(_characterLists[index].name),
-                          Text(
-                              'location : ${_characterLists[index].location} : status : ${_characterLists[index].status}'),
+                          Row(
+                            children: [
+                              const Text(
+                                'Location ',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                _characterLists[index].location,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              const SizedBox(width: 20),
+                              const Text(
+                                'Species ',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                _characterLists[index].species,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       )
                     ],
@@ -178,15 +211,105 @@ class CharacterDetailsWidget extends StatelessWidget {
         children: [
           Image.network(RickNMortyCharacter.image),
           const SizedBox(height: 10),
-          Text('Status : ${RickNMortyCharacter.status}'),
+          Row(
+            children: [
+              const Text(
+                'Status ',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                RickNMortyCharacter.status,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
           const Divider(),
-          Text('Gender : ${RickNMortyCharacter.gender}'),
+          Row(
+            children: [
+              const Text(
+                'Gender ',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                RickNMortyCharacter.gender,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
           const Divider(),
-          Text('species : ${RickNMortyCharacter.species}'),
+          Row(
+            children: [
+              const Text(
+                'Species ',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                RickNMortyCharacter.species,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
           const Divider(),
-          Text('location : ${RickNMortyCharacter.location} '),
+          Row(
+            children: [
+              const Text(
+                'location ',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                RickNMortyCharacter.location,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
           const Divider(),
-          Text('Dimension : ${RickNMortyCharacter.dimension} '),
+          Row(
+            children: [
+              const Text(
+                'Dimension ',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                RickNMortyCharacter.dimension,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
