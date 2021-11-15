@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'dart:ui';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const MyApp());
@@ -59,56 +62,24 @@ class _RickAndMortyChacactersListWidgetState
   final ValueNotifier<bool> _isLoading = ValueNotifier(false);
   final ValueNotifier<bool> _isError = ValueNotifier(false);
 
-  final List<RickNMortyCharacterModel> _characterLists = [
-    RickNMortyCharacterModel(
-      name: 'Rick Sanchez',
-      dimension: '131',
-      gender: 'Male',
-      image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
-      species: 'Human',
-      location: 'Citadel of Ricks',
-      status: 'Alive',
-    ),
-    RickNMortyCharacterModel(
-      name: 'Morty Smith',
-      dimension: '131',
-      gender: 'Male',
-      image: 'https://rickandmortyapi.com/api/character/avatar/2.jpeg',
-      species: 'Human',
-      location: 'Citadel of Ricks',
-      status: 'Alive',
-    ),
-    RickNMortyCharacterModel(
-      name: 'Summer Smith',
-      dimension: 'Earth (Replacement Dimension)',
-      gender: 'Female',
-      image: 'https://rickandmortyapi.com/api/character/avatar/3.jpeg',
-      species: 'Human',
-      location: 'Replacement Dimension',
-      status: 'Alive',
-    ),
-    RickNMortyCharacterModel(
-      name: 'Beth Smith',
-      dimension: 'Earth (Replacement Dimension)',
-      gender: 'Female',
-      image: 'https://rickandmortyapi.com/api/character/avatar/4.jpeg',
-      species: 'Human',
-      location: 'Replacement Dimension',
-      status: 'Alive',
-    ),
-    RickNMortyCharacterModel(
-      name: 'Jerry Smith',
-      dimension: 'Earth (Replacement Dimension)',
-      gender: 'Male',
-      image: 'https://rickandmortyapi.com/api/character/avatar/5.jpeg',
-      species: 'Human',
-      location: 'Replacement Dimension',
-      status: 'Alive',
-    ),
-  ];
+  final List<RickNMortyCharacterModel> _characterLists = [];
+
+  Future<void> _getAllCharacter() async {
+    _isLoading.value = true;
+    final url = Uri.parse(_baseURL + _characters);
+    final _characterResponse = await http.get(url);
+
+    if (_characterResponse.statusCode != 200) {
+      _isError.value = true;
+    } else {
+      _characterLists.addAll(await getChars(_characterResponse.body));
+    }
+    _isLoading.value = false;
+  }
 
   @override
   void initState() {
+    _getAllCharacter();
     super.initState();
   }
 
@@ -199,6 +170,10 @@ class _RickAndMortyChacactersListWidgetState
       ),
     );
   }
+
+  void compute(
+      List<RickNMortyCharacterModel> Function(String responseBody) parsePhotos,
+      body) {}
 }
 
 class CharacterDetailsWidget extends StatelessWidget {
@@ -352,4 +327,20 @@ class RickNMortyCharacterModel {
       dimension: dynamic['location']['dimension'] ?? '',
     );
   }
+}
+
+String _baseURL = 'https://rickandmortyapi.com/api/';
+String _characters = 'character/?page=1';
+
+Future<List<RickNMortyCharacterModel>> getChars(String responseBOdy) {
+  return compute(parseCharacters, responseBOdy);
+}
+
+List<RickNMortyCharacterModel> parseCharacters(String responseBody) {
+  final parsed = Map<String, dynamic>.from(jsonDecode(responseBody));
+
+  return parsed['results']
+      .map<RickNMortyCharacterModel>(
+          (json) => RickNMortyCharacterModel.fromJson(json))
+      .toList();
 }
