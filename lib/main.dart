@@ -25,14 +25,13 @@ class MyHomPage extends StatefulWidget {
 }
 
 class _MyHomPageState extends State<MyHomPage> {
-  final HttpLink rickAndMortyHttpLink =
-      HttpLink('https://rickandmortyapi.com/graphql');
   late final ValueNotifier<GraphQLClient> Client;
+
   @override
   void initState() {
     Client = ValueNotifier(
       GraphQLClient(
-        link: rickAndMortyHttpLink,
+        link: HttpLink(''),
         cache: GraphQLCache(
           store: InMemoryStore(),
         ),
@@ -71,37 +70,59 @@ class RickAndMortyChacactersListWidget extends StatefulWidget {
 
 class _RickAndMortyChacactersListWidgetState
     extends State<RickAndMortyChacactersListWidget> {
-  final GraphQLClient _graphQLClient = GraphQLClient(
-    link: HttpLink('https://rickandmortyapi.com/graphql'),
-    cache: GraphQLCache(
-      store: InMemoryStore(),
-    ),
-  );
-
   final ValueNotifier<bool> _isLoading = ValueNotifier(false);
   final ValueNotifier<bool> _isError = ValueNotifier(false);
 
-  Future<void> GetAllCharacters() async {
-    _isLoading.value = true;
-    final QueryResult result = await _graphQLClient.query(
-      QueryOptions(document: gql(rickCharacters)),
-    );
-    if (result.hasException) {
-      _isError.value = true;
-    } else {
-      _isError.value = false;
-      _characterLists = List.from(result.data!['characters']['results'])
-          .map((char) => RickNMortyCharacterModel.fromJson(char))
-          .toList();
-    }
-    _isLoading.value = false;
-  }
-
-  List<RickNMortyCharacterModel> _characterLists = [];
+  final List<RickNMortyCharacterModel> _characterLists = [
+    RickNMortyCharacterModel(
+      name: 'Rick Sanchez',
+      dimension: '131',
+      gender: 'Male',
+      image: 'https://rickandmortyapi.com/api/character/avatar/1.jpeg',
+      species: 'Human',
+      location: 'Citadel of Ricks',
+      status: 'Alive',
+    ),
+    RickNMortyCharacterModel(
+      name: 'Morty Smith',
+      dimension: '131',
+      gender: 'Male',
+      image: 'https://rickandmortyapi.com/api/character/avatar/2.jpeg',
+      species: 'Human',
+      location: 'Citadel of Ricks',
+      status: 'Alive',
+    ),
+    RickNMortyCharacterModel(
+      name: 'Summer Smith',
+      dimension: 'Earth (Replacement Dimension)',
+      gender: 'Female',
+      image: 'https://rickandmortyapi.com/api/character/avatar/3.jpeg',
+      species: 'Human',
+      location: 'Replacement Dimension',
+      status: 'Alive',
+    ),
+    RickNMortyCharacterModel(
+      name: 'Beth Smith',
+      dimension: 'Earth (Replacement Dimension)',
+      gender: 'Female',
+      image: 'https://rickandmortyapi.com/api/character/avatar/4.jpeg',
+      species: 'Human',
+      location: 'Replacement Dimension',
+      status: 'Alive',
+    ),
+    RickNMortyCharacterModel(
+      name: 'Jerry Smith',
+      dimension: 'Earth (Replacement Dimension)',
+      gender: 'Male',
+      image: 'https://rickandmortyapi.com/api/character/avatar/5.jpeg',
+      species: 'Human',
+      location: 'Replacement Dimension',
+      status: 'Alive',
+    ),
+  ];
 
   @override
   void initState() {
-    GetAllCharacters();
     super.initState();
   }
 
@@ -147,8 +168,41 @@ class _RickAndMortyChacactersListWidgetState
                       Column(
                         children: [
                           Text(_characterLists[index].name),
-                          Text(
-                              'location : ${_characterLists[index].location} : status : ${_characterLists[index].status}'),
+                          Row(
+                            children: [
+                              const Text(
+                                'Location ',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                _characterLists[index].location,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              const SizedBox(width: 20),
+                              const Text(
+                                'Species ',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                _characterLists[index].species,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       )
                     ],
@@ -178,15 +232,105 @@ class CharacterDetailsWidget extends StatelessWidget {
         children: [
           Image.network(RickNMortyCharacter.image),
           const SizedBox(height: 10),
-          Text('Status : ${RickNMortyCharacter.status}'),
+          Row(
+            children: [
+              const Text(
+                'Status ',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                RickNMortyCharacter.status,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
           const Divider(),
-          Text('Gender : ${RickNMortyCharacter.gender}'),
+          Row(
+            children: [
+              const Text(
+                'Gender ',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                RickNMortyCharacter.gender,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
           const Divider(),
-          Text('species : ${RickNMortyCharacter.species}'),
+          Row(
+            children: [
+              const Text(
+                'Species ',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                RickNMortyCharacter.species,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
           const Divider(),
-          Text('location : ${RickNMortyCharacter.location} '),
+          Row(
+            children: [
+              const Text(
+                'location ',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                RickNMortyCharacter.location,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
           const Divider(),
-          Text('Dimension : ${RickNMortyCharacter.dimension} '),
+          Row(
+            children: [
+              const Text(
+                'Dimension ',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                RickNMortyCharacter.dimension,
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -223,21 +367,3 @@ class RickNMortyCharacterModel {
     );
   }
 }
-
-const rickCharacters = '''
- query{
-  characters(page:1){
-    results{
-      name
-      status
-      species
-      gender
-      image
-      location{
-        name
-        dimension
-      }
-    }
-  }
-}
-  ''';
