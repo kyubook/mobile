@@ -341,15 +341,4 @@ class RickNMortyCharacterModel {
     required this.location,
     required this.dimension,
   });
-  factory RickNMortyCharacterModel.fromJson(dynamic) {
-    return RickNMortyCharacterModel(
-      name: dynamic['name'],
-      status: dynamic['status'],
-      species: dynamic['species'],
-      gender: dynamic['gender'],
-      image: dynamic['image'],
-      location: dynamic['location']['name'],
-      dimension: dynamic['location']['dimension'] ?? '',
-    );
-  }
 }
